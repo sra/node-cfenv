@@ -33,8 +33,8 @@ class AppEnv
     @services = getServices @, options
 
     @name     = getName @, options
-    @port     = getPort @
-    @bind     = getBind @
+    @port     = getPort @, options
+    @bind     = getBind @, options
     @urls     = getURLs @, options
     @url      = @urls[0]
 
@@ -134,8 +134,8 @@ getServices = (appEnv, options) ->
   return envValue
 
 #-------------------------------------------------------------------------------
-getPort = (appEnv) ->
-  portString = process.env.VCAP_APP_PORT || process.env.PORT
+getPort = (appEnv, options) ->
+  portString = process.env.VCAP_APP_PORT || options.port || process.env.PORT
 
   unless portString?
     return 3000 unless appEnv.name?
@@ -173,8 +173,8 @@ getName = (appEnv, options) ->
   return null
 
 #-------------------------------------------------------------------------------
-getBind = (appEnv) ->
-  return appEnv.app?.host || "localhost"
+getBind = (appEnv, options) ->
+  return appEnv.app?.host || options.bind || "localhost"
 
 #-------------------------------------------------------------------------------
 getURLs = (appEnv, options) ->
